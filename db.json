@@ -1,0 +1,23 @@
+﻿{
+  "alerts": [
+    { "id": 1, "type": "PRICE_SPIKE", "message": "BTC jumped 8% in 5 minutes", "severity": "HIGH", "timestamp": "2026-03-15T10:00:00Z" },
+    { "id": 2, "type": "VOLUME_SPIKE", "message": "ETH volume surged 3x", "severity": "MEDIUM", "timestamp": "2026-03-15T10:05:00Z" },
+    { "id": 3, "type": "VOLATILITY_BURST", "message": "SOL volatility index at 92", "severity": "HIGH", "timestamp": "2026-03-15T10:10:00Z" },
+    { "id": 4, "type": "FLASH_CRASH", "message": "DOGE dropped 15% instantly", "severity": "HIGH", "timestamp": "2026-03-15T10:15:00Z" },
+    { "id": 5, "type": "SUDDEN_PUMP", "message": "ADA pumped 12%", "severity": "MEDIUM", "timestamp": "2026-03-15T10:20:00Z" },
+    { "id": 6, "type": "VOLATILITY_SPIKE", "message": "XRP low volatility detected", "severity": "LOW", "timestamp": "2026-03-15T10:25:00Z" }
+  ],
+  "signals": [
+    { "id": 1, "symbol": "BTC/USD", "action": "BUY", "confidence": 87, "price": 68000, "timestamp": "2026-03-15T10:00:00Z" },
+    { "id": 2, "symbol": "ETH/USD", "action": "SELL", "confidence": 72, "price": 3500, "timestamp": "2026-03-15T10:05:00Z" },
+    { "id": 3, "symbol": "SOL/USD", "action": "BUY", "confidence": 91, "price": 180, "timestamp": "2026-03-15T10:10:00Z" }
+  ],
+  "analytics": [
+    { "id": 1, "symbol": "BTC", "volume": 120000, "priceChange": 8.2, "high": 69000, "low": 63000, "timestamp": "2026-03-15T10:00:00Z" },
+    { "id": 2, "symbol": "ETH", "volume": 85000, "priceChange": -2.1, "high": 3600, "low": 3400, "timestamp": "2026-03-15T10:00:00Z" },
+    { "id": 3, "symbol": "SOL", "volume": 45000, "priceChange": 5.7, "high": 185, "low": 172, "timestamp": "2026-03-15T10:00:00Z" }
+  ],
+  "users": [
+    { "id": 1, "username": "admin", "password": "admin123", "name": "Nexus Admin" }
+  ]
+}
