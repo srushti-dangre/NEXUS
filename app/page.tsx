@@ -14,7 +14,6 @@ export default function Home() {
   const volHRef = useRef<number[]>(Array.from({length:40},()=>0.4+Math.random()*1.6));
   const router = useRouter();
 
-  // Auth guard
   useEffect(() => {
     const stored = localStorage.getItem("nexus_user");
     if (!stored) { router.push("/login"); return; }
@@ -68,7 +67,6 @@ export default function Home() {
       <ParticleBg />
       <div style={{position:"fixed",inset:0,zIndex:0,pointerEvents:"none",backgroundImage:"linear-gradient(rgba(0,200,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,255,0.03) 1px,transparent 1px)",backgroundSize:"40px 40px"}} />
 
-      {/* NAV */}
       <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 20px",background:"rgba(3,5,8,0.96)",borderBottom:"1px solid rgba(0,200,255,0.12)",flexShrink:0,backdropFilter:"blur(20px)",position:"relative",zIndex:10}}>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
           <div style={{width:34,height:34,border:"2px solid #00c8ff",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"Orbitron,monospace",fontSize:15,fontWeight:900,color:"#00c8ff",animation:"logoPulse 2s ease-in-out infinite"}}>N</div>
@@ -78,7 +76,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* NAV PILLS - now with routing */}
         <div style={{display:"flex",gap:6}}>
           {["OVERVIEW","ANALYTICS","SIGNALS","ALERTS"].map((item)=>(
             <button key={item} onClick={()=>navTo(item)}
@@ -90,20 +87,16 @@ export default function Home() {
         </div>
 
         <div style={{display:"flex",alignItems:"center",gap:12}}>
-          {/* User role badge */}
           {user && (
             <span style={{fontFamily:"JetBrains Mono,monospace",fontSize:9,color:"#ffbe00",padding:"3px 10px",borderRadius:20,border:"1px solid rgba(255,190,0,0.3)",background:"rgba(255,190,0,0.05)",letterSpacing:1}}>
               {user.role.toUpperCase()}
             </span>
           )}
-          {/* Live badge */}
           <div style={{display:"flex",alignItems:"center",gap:6,fontFamily:"JetBrains Mono,monospace",fontSize:10,color:"#00ff9d",padding:"4px 12px",borderRadius:4,border:"1px solid rgba(0,255,157,0.3)",background:"rgba(0,255,157,0.05)"}}>
             <div style={{width:6,height:6,borderRadius:"50%",background:"#00ff9d",boxShadow:"0 0 8px #00ff9d",animation:"blink 1.2s infinite"}} />
             {isConnected ? "LIVE FEED" : "OFFLINE"}
           </div>
-          {/* Clock */}
           <div style={{fontFamily:"JetBrains Mono,monospace",fontSize:13,color:"#00c8ff",letterSpacing:2}}>{time}</div>
-          {/* Logout */}
           <button onClick={logout}
             style={{fontFamily:"JetBrains Mono,monospace",fontSize:9,color:"#ff2d55",padding:"3px 10px",borderRadius:20,border:"1px solid rgba(255,45,85,0.3)",background:"rgba(255,45,85,0.05)",cursor:"pointer",letterSpacing:1,transition:"all 0.2s"}}
             onMouseEnter={e=>{(e.currentTarget).style.background="rgba(255,45,85,0.15)";}}
@@ -112,10 +105,8 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* TICKER */}
       <TickerBar latestTicks={latestTicks} />
 
-      {/* MAIN GRID */}
       <div style={{flex:1,minHeight:0,display:"grid",gridTemplateColumns:"210px 1fr 270px",gridTemplateRows:"1fr 1fr",gap:10,padding:10,position:"relative",zIndex:10}}>
         <Card>
           <CardHead title="LIVE PRICES" badge="LIVE" badgeType="live" />
@@ -199,6 +190,7 @@ function ParticleBg() {
     let pts:{x:number;y:number;r:number;vx:number;vy:number;a:number}[]=[];
     let raf:number;
     function init(){
+      if(!c) return;
       c.width=window.innerWidth; c.height=window.innerHeight;
       pts=Array.from({length:55},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.4+0.3,vx:(Math.random()-0.5)*0.25,vy:(Math.random()-0.5)*0.25,a:Math.random()*0.35+0.08}));
     }
@@ -507,7 +499,7 @@ function SimulationControls({selectedSym,onSelect}:{selectedSym:string;onSelect:
   const trigger=async(type:string)=>{
     setLoading(type);
     try {
-      await fetch("http://localhost:4000/api/simulate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({type,symbol:selectedSym})});
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/simulate`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({type,symbol:selectedSym})});
       setLastEvent(`${type} triggered on ${selectedSym}`);
       setTimeout(()=>setLastEvent(null),4000);
     } catch { setLastEvent("Error: Backend not reachable"); }
