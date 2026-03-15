@@ -47,7 +47,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
   }>>([]);
 
   useEffect(() => {
-    const socket: Socket = io("http://localhost:4000", {
+    const socket: Socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000", {
       transports: ["websocket"],
     });
 
