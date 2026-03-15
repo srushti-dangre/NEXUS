@@ -185,31 +185,52 @@ function CardHead({title,badge,badgeType}:{title:string;badge:string;badgeType?:
 function ParticleBg() {
   const ref=useRef<HTMLCanvasElement>(null);
   useEffect(()=>{
-    const c=ref.current; if(!c) return;
-    const ctx=c.getContext("2d")!;
+    const c=ref.current;
+    if(!c) return;
+    const ctx=c.getContext("2d");
+    if(!ctx) return;
     let pts:{x:number;y:number;r:number;vx:number;vy:number;a:number}[]=[];
     let raf:number;
     function init(){
       if(!c) return;
-      c.width=window.innerWidth; c.height=window.innerHeight;
-      pts=Array.from({length:55},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.4+0.3,vx:(Math.random()-0.5)*0.25,vy:(Math.random()-0.5)*0.25,a:Math.random()*0.35+0.08}));
+      c.width=window.innerWidth;
+      c.height=window.innerHeight;
+      pts=Array.from({length:55},()=>({
+        x:Math.random()*(c as HTMLCanvasElement).width,
+        y:Math.random()*(c as HTMLCanvasElement).height,
+        r:Math.random()*1.4+0.3,
+        vx:(Math.random()-0.5)*0.25,
+        vy:(Math.random()-0.5)*0.25,
+        a:Math.random()*0.35+0.08
+      }));
     }
     function draw(){
+      if(!c || !ctx) return;
       ctx.clearRect(0,0,c.width,c.height);
       pts.forEach(p=>{
         p.x+=p.vx; p.y+=p.vy;
-        if(p.x<0||p.x>c.width)p.vx*=-1;
-        if(p.y<0||p.y>c.height)p.vy*=-1;
-        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        ctx.fillStyle=`rgba(0,200,255,${p.a})`; ctx.fill();
+        if(!c) return;
+        if(p.x<0||p.x>c.width) p.vx*=-1;
+        if(p.y<0||p.y>c.height) p.vy*=-1;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=`rgba(0,200,255,${p.a})`;
+        ctx.fill();
       });
+      if(!c) return;
       pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{
+        if(!c || !ctx) return;
         const d=Math.hypot(a.x-b.x,a.y-b.y);
-        if(d<110){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(0,200,255,${0.07*(1-d/110)})`;ctx.lineWidth=1;ctx.stroke();}
+        if(d<110){
+          ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle=`rgba(0,200,255,${0.07*(1-d/110)})`;
+          ctx.lineWidth=1;ctx.stroke();
+        }
       }));
       raf=requestAnimationFrame(draw);
     }
-    init(); draw();
+    init();
+    draw();
     window.addEventListener("resize",init);
     return()=>{cancelAnimationFrame(raf);window.removeEventListener("resize",init);};
   },[]);
